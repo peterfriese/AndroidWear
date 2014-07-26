@@ -98,6 +98,7 @@ public class MyActivity extends Activity implements WearableListView.ClickListen
 
         final CircledImageView image;
         final TextView text;
+        private float mScale;
 
         public MyItemView(Context context) {
             super(context);
@@ -118,13 +119,14 @@ public class MyActivity extends Activity implements WearableListView.ClickListen
 
         @Override
         public float getCurrentProximityValue() {
-            return image.getCircleRadius();
+            return mScale;
         }
 
         @Override
         public void setScalingAnimatorValue(float value) {
-            image.setCircleRadius(value);
-            image.setCircleRadiusPressed(value);
+            mScale = value;
+            image.setCircleRadius(mScale);
+            image.setCircleRadiusPressed(mScale);
         }
 
         @Override
