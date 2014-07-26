@@ -10,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MyActivity extends Activity {
+public class MyActivity extends Activity implements WearableListView.ClickListener {
 
     private WearableListView mListView;
     private MyListAdapter mAdapter;
@@ -36,6 +37,7 @@ public class MyActivity extends Activity {
             public void onLayoutInflated(WatchViewStub stub) {
                 mListView = (WearableListView) stub.findViewById(R.id.sample_list_view);
                 mListView.setAdapter(mAdapter);
+                mListView.setClickListener(MyActivity.this);
             }
         });
     }
@@ -55,6 +57,16 @@ public class MyActivity extends Activity {
         items.add(R.drawable.ic_action_mail_add);
         items.add(R.drawable.ic_action_microphone);
         items.add(R.drawable.ic_action_photo);
+    }
+
+    @Override
+    public void onClick(WearableListView.ViewHolder viewHolder) {
+        Toast.makeText(this, String.format("You selected item #%s", viewHolder.getPosition()), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onTopEmptyRegionClick() {
+        Toast.makeText(this, "You tapped into the empty area above the list", Toast.LENGTH_SHORT).show();
     }
 
     public class MyListAdapter extends WearableListView.Adapter {
