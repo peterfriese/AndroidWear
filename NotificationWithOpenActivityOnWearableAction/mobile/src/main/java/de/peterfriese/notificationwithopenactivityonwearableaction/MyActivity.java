@@ -1,7 +1,6 @@
 package de.peterfriese.notificationwithopenactivityonwearableaction;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,8 +18,6 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import de.peterfriese.notificationwithopenactivityonwearableaction.common.Constants;
-
-import static com.google.android.gms.wearable.PutDataRequest.WEAR_URI_SCHEME;
 
 public class MyActivity extends Activity {
 
@@ -81,6 +78,11 @@ public class MyActivity extends Activity {
     private void sendNotification() {
         if (mGoogleApiClient.isConnected()) {
             PutDataMapRequest dataMapRequest = PutDataMapRequest.create(Constants.NOTIFICATION_PATH);
+            // Make sure the data item is unique. Usually, this will not be required, as the payload
+            // (in this case the title and the content of the notification) will be different for almost all
+            // situations. However, in this example, the text and the content are always the same, so we need
+            // to disambiguate the data item by adding a field that contains teh current time in milliseconds.
+            dataMapRequest.getDataMap().putDouble(Constants.NOTIFICATION_TIMESTAMP, System.currentTimeMillis());
             dataMapRequest.getDataMap().putString(Constants.NOTIFICATION_TITLE, "This is the title");
             dataMapRequest.getDataMap().putString(Constants.NOTIFICATION_CONTENT, "This is a notification with some text.");
             PutDataRequest putDataRequest = dataMapRequest.asPutDataRequest();
