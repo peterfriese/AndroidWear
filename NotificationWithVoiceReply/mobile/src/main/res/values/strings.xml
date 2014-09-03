@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">My Application</string>
+    <string name="app_name">Notification With VoiceReply</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="birthday_notification_title">Birthday reminder</string>
+    <string name="birthday_notification_body">%s has a birthday today!</string>
+    <string name="reply_label">"Wish a happy birthday"</string>
+    <string-array name="canned_responses">
+        <item>Polite</item>
+        <item>Informal</item>
+    </string-array>
 
 </resources>
