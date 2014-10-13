@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.WearableExtender;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.RemoteInput;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,13 +47,16 @@ public class MainActivity extends Activity {
                 .setLabel(replyLabel)
                 .setChoices(cannedResponses)
                 .build();
+        remoteInput.getExtras().putString(Constants.EXTRA_PERSON_NAME, name);
 
-
+        // Send input to broadcast receiver
         Intent broadcastIntent = new Intent(NotificationIntentReceiver.WISH_HAPPY_BIRTHDAY);
-        PendingIntent broadcastPendingIntent = PendingIntent.getBroadcast(this, 0, broadcastIntent, 0);
+        broadcastIntent.putExtra(Constants.EXTRA_PERSON_NAME, name);
+        PendingIntent broadcastPendingIntent = PendingIntent.getBroadcast(this, 17, broadcastIntent, 0);
 
-        Intent replyIntent = new Intent(this, MainActivity.class);
-        PendingIntent replyPendingIntent = PendingIntent.getActivity(this, 0, replyIntent, 0);
+        // Send input to this activity
+//        Intent replyIntent = new Intent(this, MainActivity.class);
+//        PendingIntent replyPendingIntent = PendingIntent.getActivity(this, 0, replyIntent, 0);
 
         NotificationCompat.Action action =
                 new NotificationCompat.Action.Builder(R.drawable.ic_full_reply, replyLabel, broadcastPendingIntent)
@@ -72,7 +74,13 @@ public class MainActivity extends Activity {
                     .setContentText(contentText)
                     // TODO the reply action does not get auto-dismissed on the wearable. Find out if this is WAI
                     .setAutoCancel(true)
-                    .extend(new WearableExtender().addAction(action))
+                    .setStyle(new NotificationCompat.BigPictureStyle()
+                            .bigPicture(BitmapFactory.decodeResource(getResources(), R.drawable.peter))
+                            .setBigContentTitle(contentTitle)
+                            .setSummaryText(contentText))
+                    .extend(
+                            new WearableExtender()
+                                    .addAction(action))
                     .build();
 
         NotificationManagerCompat notificationManager =
@@ -82,22 +90,4 @@ public class MainActivity extends Activity {
         notificationId++;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
